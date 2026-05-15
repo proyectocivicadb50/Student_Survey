@@ -6,7 +6,7 @@ sources:
     schema: kaggle 
     description: "Fuente de datos crudos de la encuesta de estudiantes sobre salud mental y redes sociales."
     tables:
-      - name: student_survey
+      - name: survey_1000
         description: "Tabla con los resultados completos de la encuesta."
         columns:
           - name: TIMESTAMP

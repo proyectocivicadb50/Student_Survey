@@ -34,6 +34,12 @@ clean-targets: ["target", "dbt_packages"]
 models:
   student_survey:
 
+    bronze:
+      +database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB"
+      +schema: intermediate
+      +materialized: view
+      +tags: ["bronze"]
+
     staging:
       +database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
       +schema: kaggle
