@@ -1,0 +1,46 @@
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'student_survey'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+profile: 'student_survey'
+
+# These configurations specify where dbt should look for different types of files.
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+analysis-paths: ["analyses"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+# Configuring models
+models:
+  student_survey:
+    bronze:
+      +database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB"
+      +schema: intermediate
+      +materialized: view
+      +tags: ["bronze"]
+
+    staging:
+      +database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
+      +schema: kaggle
+      +materialized: view
+      +tags: ["silver"]
+
+    gold:
+      +database: "{{ env_var('DBT_ENVIRONMENTS') }}_GOLD_DB"
+      +schema: kaggle
+      +materialized: table
+      +tags: ["gold"]
+
+# Configuring seeds (Configuración separada a nivel raíz)
+seeds:
+  student_survey: # Nombre de tu proyecto también aquí
+    +database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB"
+    +schema: seed
