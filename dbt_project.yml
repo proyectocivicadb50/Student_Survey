@@ -29,13 +29,13 @@ models:
 
     staging:
       +database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
-      +schema: kaggle
+      +schema: core
       +materialized: view
       +tags: ["silver"]
 
-    gold:
+    marts:
       +database: "{{ env_var('DBT_ENVIRONMENTS') }}_GOLD_DB"
-      +schema: kaggle
+      +schema: marts
       +materialized: table
       +tags: ["gold"]
 
