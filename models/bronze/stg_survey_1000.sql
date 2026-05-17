@@ -24,29 +24,29 @@ SELECT
 
     -- Nivel educativo
     EDUCATION_LEVEL                                                                 AS education_level_raw,
-    "Socioeconomic status (Parent's education level)"                               AS parent_education_raw,
+    SOCIOECONOMIC_STATUS                                                            AS parent_education_raw,
 
     -- Hábitos académicos
-    "Study time (In Hours)"                                                         AS study_time_raw,
-    "Attendance rate (In Percentile)"                                               AS attendance_rate_raw,
-    "Last Academic Result (GPA/CGPA)"                                               AS academic_result_raw,
+    STUDY_TIME_HOURS                                                                AS study_time_raw,
+    ATTENDANCE_RATE_PERCENTILE                                                      AS attendance_rate_raw,
+    LAST_ACADEMIC_RESULTS                                                           AS academic_result_raw,
     SOCIAL_MEDIA_DISTRACTION_DURING_ACADEMIC_ACTIVITIES                             AS social_media_distraction_score_raw,
 
     -- Redes sociales
     SOCIAL_MEDIA_PLATFORM                                                           AS social_media_platform_raw,
-    "Time spent in social media (hours)"                                            AS social_media_hours_raw,
+    TIME_SPENT_SOCIAL_MEDIA_HOURS                                                   AS social_media_hours_raw,
     MOST_TIME_SPENT_IN_A_DAY                                                        AS peak_usage_time_raw,
-    "Withdrawal symptoms (Side effects of not using social media)"                  AS withdrawal_symptom_raw,
+    WITHDRAWAL_SYMPTOMS                                                             AS withdrawal_symptom_raw,
 
     -- Salud mental (escalas 1-5)
     SLEEP_DISTURBANCE_ON_SLEEP_QUALITY                                              AS sleep_disturbance_score_raw,
     MOOD_MODIFICATION_SCALE                                                         AS mood_modification_score_raw,
     ANXIETY_SCALE                                                                   AS anxiety_score_raw,
     DEPRESSION_SCALE                                                                AS depression_score_raw,
-    SELFESTEEM_SCALE                                                                AS selfesteem_score_raw,
+    SELF_ESTEEM_SCALE                                                               AS selfesteem_score_raw,
 
     -- Actividad física
-    "Physical activity (30 min)"                                                    AS physical_activity_30min_raw,
+    PHYSICAL_ACTIVITY                                                               AS physical_activity_30min_raw,
     HOURS_EXERCISE_PER_WEEK                                                         AS hours_exercise_per_week_raw,
     EXERCISE_FREQUENCY                                                              AS exercise_frequency_raw,
     EXERCISE_TYPE                                                                   AS exercise_type_raw,

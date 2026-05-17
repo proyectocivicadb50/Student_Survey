@@ -1,0 +1,212 @@
+version: 2
+
+models:
+  # ==========================================
+  # TABLA DE HECHOS CENTRAL
+  # ==========================================
+  - name: core_survey_responses
+    description: "Tabla central de hechos que contiene las métricas cuantitativas de la encuesta y las claves foráneas a las dimensiones."
+    columns:
+      - name: survey_id
+        description: "Llave primaria única de cada encuesta basada en el timestamp y edad."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: age
+        description: "Edad del estudiante en formato número entero."
+        data_tests:
+          - not_null
+
+      - name: study_time_hours
+        description: "Horas de estudio diarias (extraído y limpio de caracteres de texto)."
+
+      - name: attendance_rate_percentile
+        description: "Porcentaje de asistencia del 0 al 100."
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0 and <= 100"
+
+      - name: last_academic_results
+        description: "Calificación académica final (GPA) normalizada en escala decimal del 0.0 al 5.0."
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0.0 and <= 5.0"
+
+      # --- TESTS DE INTEGRIDAD REFERENCIAL (Claves Foráneas) ---
+      - name: gender_key
+        description: "Llave foránea que conecta con dim_gender."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_gender')
+                field: gender_key
+
+      - name: residence_area_key
+        description: "Llave foránea que conecta con dim_residence_area."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_residence_area')
+                field: residence_area_key
+
+      - name: education_level_key
+        description: "Llave foránea que conecta con dim_education_level."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_education_level')
+                field: education_level_key
+
+      - name: socioeconomic_status_key
+        description: "Llave foránea que conecta con dim_socioeconomic_status."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_socioeconomic_status')
+                field: socioeconomic_status_key
+
+      - name: social_media_platform_key
+        description: "Llave foránea que conecta con dim_social_media_platform."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_social_media_platform')
+                field: social_media_platform_key
+
+      - name: most_time_spent_key
+        description: "Llave foránea que conecta con dim_most_time_spent."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_most_time_spent')
+                field: most_time_spent_key
+
+      - name: withdrawal_symptoms_key
+        description: "Llave foránea que conecta con dim_withdrawal_symptoms."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_withdrawal_symptoms')
+                field: withdrawal_symptoms_key
+
+      - name: exercise_frequency_key
+        description: "Llave foránea que conecta con dim_exercise_frequency."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_exercise_frequency')
+                field: exercise_frequency_key
+
+      - name: exercise_type_key
+        description: "Llave foránea que conecta con dim_exercise_type."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_exercise_type')
+                field: exercise_type_key
+
+      - name: nationality_key
+        description: "Llave foránea que conecta con dim_nationality."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_nationality')
+                field: nationality_key
+
+
+  # ==========================================
+  # TABLAS DE DIMENSIONES (Validación de PKs)
+  # ==========================================
+
+  - name: dim_gender
+    description: "Dimensión que contiene el catálogo maestro de géneros."
+    columns:
+      - name: gender_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_residence_area
+    description: "Dimensión que contiene el catálogo maestro de áreas residenciales."
+    columns:
+      - name: residence_area_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_education_level
+    description: "Dimensión que contiene el catálogo maestro de niveles educativos."
+    columns:
+      - name: education_level_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_socioeconomic_status
+    description: "Dimensión que contiene el catálogo maestro del nivel socioeconómico familiar."
+    columns:
+      - name: socioeconomic_status_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_social_media_platform
+    description: "Dimensión con el catálogo de plataformas de redes sociales utilizadas por los estudiantes."
+    columns:
+      - name: social_media_platform_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_most_time_spent
+    description: "Dimensión que clasifica los momentos del día con mayor actividad digital."
+    columns:
+      - name: most_time_spent_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_withdrawal_symptoms
+    description: "Dimensión con los síntomas de abstinencia asociados a la falta de redes sociales."
+    columns:
+      - name: withdrawal_symptoms_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_exercise_frequency
+    description: "Dimensión que mide la frecuencia e intensidad del ejercicio físico."
+    columns:
+      - name: exercise_frequency_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_exercise_type
+    description: "Dimensión con los tipos de disciplinas deportivas registradas."
+    columns:
+      - name: exercise_type_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_nationality
+    description: "Dimensión maestra de nacionalidades enriquecida con la validación del perfil europeo."
+    columns:
+      - name: nationality_key
+        data_tests:
+          - unique
+          - not_null
