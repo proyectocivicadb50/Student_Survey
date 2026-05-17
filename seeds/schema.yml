@@ -1,0 +1,11 @@
+version: 2
+
+seeds:
+  - name: paises_seed
+    description: "Tabla de referencia que contiene el listado oficial de nacionalidades de los encuestados."
+    columns:
+      - name: nationality
+        description: "Nombre de la nacionalidad en inglés (ej. Swiss, Swedish, Spanish)."
+        data_tests:
+          - unique    # Asegura que ningún país esté duplicado por error
+          - not_null  # Asegura que no haya filas vacías en esta columna

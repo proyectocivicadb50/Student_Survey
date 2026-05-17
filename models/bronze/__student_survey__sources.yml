@@ -7,117 +7,149 @@ sources:
     description: "Fuente de datos crudos de la encuesta de estudiantes sobre salud mental y redes sociales."
     tables:
       - name: survey_1000
-        description: "Tabla con los resultados completos de la encuesta."
+        description: "Tabla con los resultados completos de la encuesta de 1000 registros una vez procesada."
         columns:
           - name: TIMESTAMP
-            description: "Fecha y hora de registro."
-            tests:
+            description: "Fecha y hora exacta en la que el estudiante registró sus respuestas en el formulario."
+            data_tests:
               - not_null
 
           - name: AGE
-            tests:
+            description: "Edad del estudiante encuestado (valor numérico entero)."
+            data_tests:
               - not_null
 
           - name: GENDER
-            tests:
+            description: "Género autoidentificado del encuestado."
+            data_tests:
               - accepted_values:
                   arguments:
                     values: ["Male", "Female"]
 
           - name: RESIDENCE_AREA
-            tests:
+            description: "Zona residencial donde habita el estudiante."
+            data_tests:
               - accepted_values:
                   arguments:
                     values: ["Urban", "Rural"]
 
           - name: EDUCATION_LEVEL
-            description: "Nivel de educación del estudiante."
+            description: "Nivel de educación formal actual del estudiante (ej. Tertiary Education, HSC / A' Level)."
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ["Tertiary Education", "SSC / O' Level", "HSC / A' Level"]
 
           - name: SOCIOECONOMIC_STATUS
-            description: "Estatus socioeconómico basado en los padres."
+            description: "Estatus socioeconómico aproximado basado en el nivel máximo de estudios de los padres."
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ["Tertiary Education", "SSC / O' Level", "HSC / A' Level", "No education", "Madrasah"]
 
           - name: STUDY_TIME_HOURS
-            description: "Tiempo de estudio reportado."
+            description: "Tiempo estimado de estudio diario reportado autónomamente (número entero de horas)."
 
           - name: ATTENDANCE_RATE_PERCENTILE
-            description: "Tasa de asistencia."
+            description: "Tasa de asistencia a clases expresada numéricamente como porcentaje en formato entero."
+            data_tests:
+              # dbt-utils ofrece dbt_utils.expression_is_true. Aquí usamos el test nativo para validar que esté entre 0 y 100
+              - dbt_utils.expression_is_true:
+                  arguments:
+                    expression: ">= 0 and <= 100"
+              - not_null
 
           - name: SOCIAL_MEDIA_PLATFORM
-            tests:
+            description: "Red social principal o en la que el estudiante invierte la mayor cantidad de tiempo."
+            data_tests:
               - accepted_values:
                   arguments:
                     values: ["YouTube", "Instagram", "Facebook", "TikTok", "Other"]
 
           - name: TIME_SPENT_SOCIAL_MEDIA_HOURS
-            description: "Horas diarias en redes sociales."
+            description: "Cantidad total de horas diarias consumidas en plataformas de redes sociales (número entero)."
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ["Night", "Morning", "Evening", "Afternoon"]
 
           - name: MOST_TIME_SPENT_IN_A_DAY
-            description: "Momento del día con mayor uso."
+            description: "Momento preferente del día en el que se registra el pico más alto de uso de redes sociales."
 
           - name: PHYSICAL_ACTIVITY
-            tests:
+            description: "Indicador binario sobre si realiza al menos 30 minutos de actividad física al día."
+            data_tests:
               - accepted_values:
                   arguments:
                     values: ["Yes", "No"]
 
           - name: WITHDRAWAL_SYMPTOMS
-            description: "Síntomas de abstinencia reportados."
+            description: "Efectos secundarios psicológicos o fisiológicos detectados al no tener acceso a redes sociales."
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ["Trouble concentrating", "No symtoms", "Irritability or agitation", "Feeling restless", "Cravings"]
 
           - name: SLEEP_DISTURBANCE_ON_SLEEP_QUALITY
-            tests:
+            description: "Métrica en escala del 1 al 5 que mide el impacto negativo de las redes en la calidad del sueño."
+            data_tests:
               - accepted_values:
                   arguments:
                     values: [1, 2, 3, 4, 5]
-                    quote: false
 
           - name: MOOD_MODIFICATION_SCALE
-            tests:
+            description: "Escala psicológica del 1 al 5 que evalúa la alteración del estado de ánimo por uso de pantallas."
+            data_tests:
               - accepted_values:
                   arguments:
                     values: [1, 2, 3, 4, 5]
-                    quote: false
 
           - name: ANXIETY_SCALE
-            tests:
+            description: "Nivel autodiagnosticado o medido de ansiedad en una escala del 1 al 5."
+            data_tests:
               - accepted_values:
                   arguments:
                     values: [1, 2, 3, 4, 5]
-                    quote: false
 
           - name: DEPRESSION_SCALE
-            tests:
+            description: "Nivel medido de sintomatología depresiva en una escala del 1 al 5."
+            data_tests:
               - accepted_values:
                   arguments:
                     values: [1, 2, 3, 4, 5]
-                    quote: false
 
           - name: SELF_ESTEEM_SCALE
-            tests:
+            description: "Métrica de percepción de autoestima del estudiante en escala numérica de valoración del 1 al 5."
+            data_tests:
               - accepted_values:
                   arguments:
                     values: [1, 2, 3, 4, 5]
-                    quote: false
 
           - name: LAST_ACADEMIC_RESULTS
-            description: "Último promedio académico."
+            description: "Último promedio académico de calificaciones finales (GPA/CGPA) normalizado en escala decimal de 0 a 5."
 
           - name: SOCIAL_MEDIA_DISTRACTION_DURING_ACADEMIC_ACTIVITIES
-            description: "Nivel de distracción por redes en clase."
+            description: "Frecuencia o nivel de distracción que causan las notificaciones y redes durante las horas de clase."
 
           - name: COLUMN_19
-            description: "Columna de datos adicionales o sin etiqueta clara."
+            description: "Campo auxiliar o columna de control técnico dentro del set de datos crudos."
 
           - name: HOURS_EXERCISE_PER_WEEK
-            description: "Horas de ejercicio semanales."
+            description: "Cantidad agregada de horas semanales dedicadas a realizar ejercicio físico."
 
           - name: EXERCISE_FREQUENCY
-            tests:
+            description: "Clasificación cualitativa de la regularidad deportiva del estudiante."
+            data_tests:
               - accepted_values:
                   arguments:
                     values: ["Low", "Medium", "High"]
 
           - name: EXERCISE_TYPE
-            description: "Tipo de ejercicio realizado."
+            description: "Disciplina o tipo de actividad deportiva predominante practicada (ej. Cardio, Team Sports, Gym)."
+            data_tests:
+              - accepted_values:
+                  arguments:
+                    values: ["Team Sports", "Gym", "Cardio",""]
 
           - name: NATIONALITY
-            description: "Nacionalidad del encuestado."
+            description: "Nacionalidad de origen informada por el estudiante encuestado (cruzar con la tabla paises_seed)."

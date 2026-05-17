@@ -8,14 +8,13 @@
 SELECT
     -- Metadata de ingesta
     CURRENT_TIMESTAMP()                                                             AS _loaded_at,
-    '{{ run_started_at }}'                                                          AS _dbt_run_at,
-
+    
     -- Identificador surrogate (no hay PK natural en el CSV)
     ROW_NUMBER() OVER (ORDER BY TIMESTAMP)                                          AS survey_id,
 
     -- Timestamp original
     TRY_TO_TIMESTAMP(TIMESTAMP, 'DD/MM/YYYY HH24:MI:SS')                            AS submitted_at_raw,
-    TIMESTAMP                                                                       AS submitted_at_raw_txt,
+    
 
     -- Demografía
     AGE                                                                             AS age_raw,
