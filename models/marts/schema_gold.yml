@@ -1,0 +1,116 @@
+version: 2
+
+models:
+  # ==========================================
+  # CASO DE USO 1: SALUD MENTAL Y REDES SOCIALES
+  # ==========================================
+  - name: mart_mental_health_social_media
+    description: "Mart analítico diseñado para estudiar la correlación entre los hábitos de consumo digital (plataformas y horas de exposición) y diversos indicadores de salud mental y bienestar psicológico."
+    columns:
+      - name: survey_id
+        description: "Identificador único de la encuesta."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: social_media_platform
+        description: "Nombre de la plataforma de red social preferida por el estudiante (YouTube, TikTok, Instagram, etc.)."
+        data_tests:
+          - not_null
+
+      - name: peak_usage_time
+        description: "Momento del día en el que el estudiante reporta pasar más tiempo conectado (Night, Morning, Afternoon, Evening)."
+
+      - name: time_spent_social_media_hours
+        description: "Cantidad de horas diarias estimadas que el estudiante consume en redes sociales."
+
+      - name: withdrawal_symptoms
+        description: "Síntoma principal de abstinencia reportado al no poder usar redes sociales (Trouble concentrating, Irritability, Cravings, etc.)."
+
+      - name: anxiety_scale
+        description: "Escala auto-reportada de nivel de ansiedad experimentado habitualmente por el estudiante."
+
+      - name: depression_scale
+        description: "Escala auto-reportada de nivel de depresión experimentado habitualmente por el estudiante."
+
+  # ==========================================
+  # CASO DE USO 2: RENDIMIENTO ACADÉMICO
+  # ==========================================
+  - name: mart_academic_performance
+    description: "Mart analítico centrado en identificar el impacto del comportamiento diario del estudiante (asistencia, tiempo de estudio y distracciones digitales) sobre su rendimiento académico final (GPA)."
+    columns:
+      - name: survey_id
+        description: "Identificador único de la encuesta."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: education_level
+        description: "Nivel educativo actual del estudiante (Tertiary Education, HSC / A' Level, etc.)."
+
+      - name: parents_education_level
+        description: "Nivel socioeconómico/educativo familiar registrado."
+
+      - name: daily_study_time_hours
+        description: "Horas de estudio que el alumno dedica de manera autónoma al día."
+
+      - name: attendance_rate_percentile
+        description: "Tasa porcentual de asistencia a clases (Validado de 0 a 100)."
+        data_tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 and <= 100"
+
+      - name: gpa_score
+        description: "Calificación académica promedio final normalizada en escala decimal homogénea de 0.0 a 5.0."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0.0 and <= 5.0"
+
+  # ==========================================
+  # CASO DE USO 3: EJERCICIO FÍSICO Y BIENESTAR
+  # ==========================================
+  - name: mart_physical_activity_wellbeing
+    description: "Mart analítico orientado al análisis de los hábitos deportivos (frecuencia, disciplina y volumen horario semanal) y su potencial relación como factor protector frente a problemas de salud mental."
+    columns:
+      - name: survey_id
+        description: "Identificador único de la encuesta."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: hours_exercise_per_week
+        description: "Cantidad de horas semanales dedicadas a realizar actividad física."
+
+      - name: exercise_intensity
+        description: "Nivel de intensidad o frecuencia del ejercicio categorizado (Low, Medium, High)."
+
+      - name: exercise_type
+        description: "Tipo de disciplina física practicada principalmente (Gym, Cardio, Team Sports, None)."
+
+  # ==========================================
+  # CASO DE USO 4: PERFIL GEOGRÁFICO EUROPEO
+  # ==========================================
+  - name: mart_european_demographics
+    description: "Mart demográfico y geográfico diseñado para realizar comparativas transnacionales, aislando mediante el seed maestro el comportamiento del bloque de estudiantes pertenecientes a países de la Unión Europea y Suiza."
+    columns:
+      - name: survey_id
+        description: "Identificador único de la encuesta."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: nationality
+        description: "País de origen/nacionalidad reportado por el estudiante."
+        data_tests:
+          - not_null
+
+      - name: is_european_profile
+        description: "Flag booleano (TRUE/FALSE) determinado a partir del seed maestro que indica si la nacionalidad pertenece al perfil de análisis europeo."
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+
+      - name: gpa_score
+        description: "Rendimiento académico (GPA) del alumno en escala 0-5 para la comparación entre regiones."
