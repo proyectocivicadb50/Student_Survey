@@ -188,6 +188,15 @@ models:
                 to: ref('ref_nationality')
                 field: nationality_key
 
+      - name: date_key
+        description: "Llave foránea que conecta con ref_time."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('ref_time')
+                field: date_key
+
 
   # ==========================================
   # TABLAS DE DIMENSIONES (Validación de PKs)
@@ -272,3 +281,74 @@ models:
         data_tests:
           - unique
           - not_null
+
+  - name: ref_time
+    description: "Dimensión maestra de fechas."
+    columns:
+      - name: date_key
+        description: "Identificador único de cada fecha."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: calendar_year
+        description: "Año de la fecha (formato numérico entero)."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 2000 and <= 2030"
+
+      - name: day_name
+        description: "Nombre cualitativo del día de la semana."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+      - name: day_of_month
+        description: "Día del mes (1 al 31)."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 1 and <= 31"
+
+      - name: day_of_week
+        description: "Número de día de la semana (generalmente 1 a 7 o 0 a 6 dependiendo del motor SQL)."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 1 and <= 7"
+
+      - name: full_date
+        description: "Fecha completa en formato DATE."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: hour_of_day
+        description: "Hora del día en formato 24 horas (0 a 23)."
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0 and <= 23"
+
+      - name: month_name
+        description: "Nombre del mes (ej. January, February... o en español)."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+      - name: month_number
+        description: "Número de mes del año (1 al 12)."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
