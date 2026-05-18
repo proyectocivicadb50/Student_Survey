@@ -1,6 +1,15 @@
+{{ config(
+    materialized='incremental',
+    unique_key='survey_id'
+) }}
 
 with source as (
     select * from {{ ref('stg_survey_1000') }}
+
+    {% if is_incremental() %}
+        where submitted_at_raw > (select max(submitted_at_raw) from {{ this }})
+    {% endif %}
+
 ),
 
 transformed as (
