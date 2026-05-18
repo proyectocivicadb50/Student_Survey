@@ -13,7 +13,7 @@ transformed as (
         cast(age_raw as integer) as age,
         cast(regexp_substr(study_time_raw, '\\d+') as integer) as study_time_hours,
         cast(regexp_substr(attendance_rate_raw, '\\d+') as integer) as attendance_rate_percentile,
-        cast(regexp_substr(peak_usage_time_raw, '\\d+') as integer) as time_spent_social_media_hours,
+        cast(regexp_substr(social_media_hours_raw, '\\d+') as integer) as time_spent_social_media_hours,
         cast(try_to_numeric(replace(trim(hours_exercise_per_week_raw), ',', '.'), 5, 2) as numeric(5,2)) as hours_exercise_per_week,
         
         cast(social_media_distraction_score_raw as integer) as social_media_distraction_scale,

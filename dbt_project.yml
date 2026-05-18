@@ -28,10 +28,16 @@ models:
       +tags: ["bronze"]
 
     staging:
-      +database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
-      +schema: core
-      +materialized: view
-      +tags: ["silver"]
+      references:
+        +database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
+        +schema: references
+        +materialized: view
+        +tags: ["silver"]
+      core:
+        +database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
+        +schema: core
+        +materialized: view
+        +tags: ["silver"]
 
     marts:
       +database: "{{ env_var('DBT_ENVIRONMENTS') }}_GOLD_DB"
