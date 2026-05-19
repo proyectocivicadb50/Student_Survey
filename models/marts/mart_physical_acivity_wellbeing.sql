@@ -1,4 +1,3 @@
-
 with fct_survey as (
     select * from {{ ref('core_survey_responses') }}
 ),
@@ -13,13 +12,9 @@ dim_type as (
 
 select
     f.survey_id,
-    
-    -- Variables de hábitos deportivos
     f.hours_exercise_per_week,
     freq.exercise_frequency as exercise_intensity,
     type.exercise_type,
-    
-    -- Escalas de salud y bienestar para correlacionar
     f.anxiety_scale,
     f.depression_scale,
     f.self_esteem_scale,

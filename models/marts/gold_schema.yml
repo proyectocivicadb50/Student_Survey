@@ -1,0 +1,136 @@
+version: 2
+
+models:
+  # ==========================================
+  # CASO DE USO 1: SALUD MENTAL Y REDES SOCIALES
+  # ==========================================
+  - name: mart_mental_health_social_media
+    description: "Mart analítico diseñado para estudiar la correlación entre los hábitos de consumo digital y diversos indicadores de salud mental."
+    columns:
+      - name: survey_id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: social_media_platform
+        data_tests:
+          - not_null
+
+      - name: peak_usage_time
+
+      - name: time_spent_social_media_hours
+
+      - name: withdrawal_symptom
+
+      - name: anxiety_scale
+
+      - name: depression_scale
+
+      - name: self_esteem_scale
+
+      - name: sleep_disturbance_scale
+
+      - name: mood_modification_scale
+    
+
+  # ==========================================
+  # CASO DE USO 2: RENDIMIENTO ACADÉMICO
+  # ==========================================
+  - name: mart_academic_performance
+    description: "Mart analítico centrado en identificar el impacto del comportamiento diario del estudiante sobre su rendimiento académico final (GPA)."
+    columns:
+      - name: survey_id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: education_level
+
+      - name: parents_education_level
+
+      - name: daily_study_time_hours
+
+      - name: attendance_rate_percentile
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 100
+
+      - name: social_media_distraction_scale
+
+      - name: gpa_score
+        description: "Calificación promedio final normalizada de 0.0 a 5.0."
+        data_tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 5 
+
+  # ==========================================
+  # CASO DE USO 3: EJERCICIO FÍSICO Y BIENESTAR
+  # ==========================================
+  - name: mart_physical_activity_wellbeing
+    description: "Mart analítico orientado al análisis de los hábitos deportivos y su relación con la salud mental."
+    columns:
+      - name: survey_id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: hours_exercise_per_week
+
+      - name: exercise_intensity
+
+      - name: exercise_type
+
+      - name: anxiety_scale
+
+      - name: depression_scale
+
+      - name: self_esteem_scale
+
+      - name: sleep_disturbance_scale
+
+  # ==========================================
+  # CASO DE USO 4: PERFIL GEOGRÁFICO EUROPEO
+  # ==========================================
+  - name: mart_european_demographics
+    description: "Mart demográfico diseñado para realizar comparativas transnacionales aislando el bloque europeo."
+    columns:
+      - name: survey_id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: age
+        data_tests:
+          - not_null
+
+      - name: gender
+        data_tests:
+          - not_null
+
+      - name: residence_area
+        data_tests:
+          - not_null
+
+      - name: nationality
+        data_tests:
+          - not_null
+
+      - name: is_european_profile
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
+
+      - name: gpa_score
+
+      - name: time_spent_social_media_hours
+
+      - name: anxiety_scale
+      
+      - name: depression_scale
