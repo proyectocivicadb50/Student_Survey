@@ -23,8 +23,9 @@ SELECT
     NATIONALITY                                                                     AS nationality_raw,
 
     -- Nivel educativo
-    EDUCATION_LEVEL                                                                 AS education_level_raw,
-    SOCIOECONOMIC_STATUS                                                            AS parent_education_raw,
+   
+     EDUCATION_LEVEL                                                                AS education_level_raw,                                                              
+     SOCIOECONOMIC_STATUS                                                           AS parent_education_raw,
 
     -- Hábitos académicos
     STUDY_TIME_HOURS                                                                AS study_time_raw,
