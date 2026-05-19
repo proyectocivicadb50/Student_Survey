@@ -112,7 +112,7 @@ models:
         description: "Escala auto-reportada de nivel de autoestima experimentado habitualmente por el estudiante."
 
       - name: sleep_disturbance_scale
-        description: "Escala auto-reportada de nivel de distracción en el sueño experimentado habitualmente por el estudiante."
+        description: "Escala auto-reportada de nivel de disturbio en el sueño experimentado habitualmente por el estudiante."
 
 
   # ==========================================
@@ -128,7 +128,7 @@ models:
           - not_null
 
       - name: age
-        description: "Edad reportada por el estudiante."
+        description: "Edad del estudiante en formato número entero."
         data_tests:
           - not_null
 
