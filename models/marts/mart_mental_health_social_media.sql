@@ -4,7 +4,7 @@ with fct_survey as (
 ),
 
 dim_platform as (
-    select * from {{ ref('ref_socialmedia_platform') }}
+    select * from {{ ref('ref_socialmedia_platform') }} 
 ),
 
 dim_time as (
@@ -12,17 +12,14 @@ dim_time as (
 ),
 
 dim_withdrawal as (
-    select * from {{ ref('ref_withdrawal_symptom') }}
+    select * from {{ ref('ref_withdrawal_symptom') }} 
 )
 
 select
-    -- Identificadores y métricas de consumo
     f.survey_id,
     p.social_media_platform,
     t.most_time_spent as peak_usage_time,
     f.time_spent_social_media_hours,
-    
-    -- Métricas psicológicas y de salud mental
     w.withdrawal_symptom,
     f.anxiety_scale,
     f.depression_scale,

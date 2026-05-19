@@ -1,5 +1,3 @@
-
-
 with fct_survey as (
     select * from {{ ref('core_survey_responses') }}
 ),
@@ -21,12 +19,8 @@ select
     f.age,
     g.gender,
     r.residence_area,
-    
-    -- Datos geográficos de tu seed estratégico
     n.nationality,
     n.is_european_profile,
-    
-    -- Métricas resumen clave para comparar entre regiones
     f.last_academic_results as gpa_score,
     f.time_spent_social_media_hours,
     f.anxiety_scale,

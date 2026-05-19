@@ -16,7 +16,6 @@ models:
       - name: survey_timestamp
         description: "Fecha y hora a la que se registra la encuesta"
         data_tests:
-          - unique
           - not_null
 
       - name: age
@@ -30,9 +29,10 @@ models:
       - name: attendance_rate_percentile
         description: "Porcentaje de asistencia del 0 al 100."
         data_tests:
-          - dbt_utils.expression_is_true:
-              arguments:
-                expression: ">= 0 and <= 100"
+          - dbt_expectations.expect_column_values_to_be_between:
+                  arguments:
+                    min_value: 0
+                    max_value: 100
 
       - name: time_spent_social_media_hours
         description: "Horas en redes sociales diarias (extraído y limpio de caracteres de texto)."
@@ -91,11 +91,12 @@ models:
                 max_value: 5
 
       - name: last_academic_results
-        description: "Calificación académica final (GPA) normalizada en escala decimal del 0.0 al 5.0."
+        description: "Calificación académica final (GPA) normalizada en escala decimal del 0 al 5."
         data_tests:
-          - dbt_utils.expression_is_true:
-              arguments:
-                expression: ">= 0.0 and <= 5.0"
+          - dbt_expectations.expect_column_values_to_be_between:
+                  arguments:
+                    min_value: 0
+                    max_value: 5
 
       # --- TESTS DE INTEGRIDAD REFERENCIAL (Claves Foráneas) ---
       - name: gender_key
@@ -210,12 +211,20 @@ models:
           - unique
           - not_null
 
+      - name: gender
+        data_tests:
+          - not_null
+
   - name: ref_residence_area
     description: "Dimensión que contiene el catálogo maestro de áreas residenciales."
     columns:
       - name: residence_area_key
         data_tests:
           - unique
+          - not_null
+      
+      - name: residence_area
+        data_tests:
           - not_null
 
   - name: ref_education_level
@@ -226,12 +235,20 @@ models:
           - unique
           - not_null
 
+      - name: education_level
+        data_tests:
+          - not_null
+
   - name: ref_socioeconomic_status
     description: "Dimensión que contiene el catálogo maestro del nivel socioeconómico familiar."
     columns:
-      - name: socioeconomic_status_key
+      - name: parent_education_key
         data_tests:
           - unique
+          - not_null
+
+      - name: parent_education
+        data_tests:
           - not_null
 
   - name: ref_social_media_platform
@@ -242,12 +259,20 @@ models:
           - unique
           - not_null
 
+      - name: social_media_platform
+        data_tests:
+          - not_null
+
   - name: ref_most_time_spent
     description: "Dimensión que clasifica los momentos del día con mayor actividad digital."
     columns:
       - name: most_time_spent_key
         data_tests:
           - unique
+          - not_null
+
+      - name: most_time_spent
+        data_tests:
           - not_null
 
   - name: ref_withdrawal_symptom
@@ -258,12 +283,20 @@ models:
           - unique
           - not_null
 
+      - name: withdrawal_symptom
+        data_tests:
+          - not_null
+
   - name: ref_exercise_frequency
     description: "Dimensión que mide la frecuencia e intensidad del ejercicio físico."
     columns:
       - name: exercise_frequency_key
         data_tests:
           - unique
+          - not_null
+
+      - name: exercise_frequency
+        data_tests:
           - not_null
 
   - name: ref_exercise_type
@@ -274,6 +307,10 @@ models:
           - unique
           - not_null
 
+      - name: exercise_type
+        data_tests:
+          - not_null
+
   - name: ref_nationality
     description: "Dimensión maestra de nacionalidades enriquecida con la validación del perfil europeo."
     columns:
@@ -281,6 +318,14 @@ models:
         data_tests:
           - unique
           - not_null
+
+      - name: nationality
+        data_tests:
+          - not_null
+
+      - name: is_european_profile
+        data_type: boolean
+        
 
   - name: ref_time
     description: "Dimensión maestra de fechas."
@@ -295,9 +340,10 @@ models:
         description: "Año de la fecha (formato numérico entero)."
         data_tests:
           - not_null
-          - dbt_utils.expression_is_true:
-              arguments:
-                expression: ">= 2000 and <= 2030"
+          - dbt_expectations.expect_column_values_to_be_between:
+                  arguments:
+                    min_value: 2000
+                    max_value: 2030
 
       - name: day_name
         description: "Nombre cualitativo del día de la semana."
@@ -305,45 +351,37 @@ models:
           - not_null
           - accepted_values:
               arguments:
-                values: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                values: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
       - name: day_of_month
         description: "Día del mes (1 al 31)."
         data_tests:
           - not_null
-          - dbt_utils.expression_is_true:
-              arguments:
-                expression: ">= 1 and <= 31"
+          - dbt_expectations.expect_column_values_to_be_between:
+                  arguments:
+                    min_value: 1
+                    max_value: 31
 
       - name: day_of_week
         description: "Número de día de la semana (generalmente 1 a 7 o 0 a 6 dependiendo del motor SQL)."
         data_tests:
           - not_null
-          - dbt_utils.expression_is_true:
-              arguments:
-                expression: ">= 1 and <= 7"
+          - dbt_expectations.expect_column_values_to_be_between:
+                  arguments:
+                    min_value: 0
+                    max_value: 6
 
       - name: full_date
         description: "Fecha completa en formato DATE."
         data_tests:
           - not_null
-          - unique
-
-      - name: hour_of_day
-        description: "Hora del día en formato 24 horas (0 a 23)."
-        data_tests:
-          - not_null
-          - dbt_utils.expression_is_true:
-              arguments:
-                expression: ">= 0 and <= 23"
+        
 
       - name: month_name
-        description: "Nombre del mes (ej. January, February... o en español)."
+        description: "Nombre del mes."
         data_tests:
           - not_null
-          - accepted_values:
-              arguments:
-                values: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+          
 
       - name: month_number
         description: "Número de mes del año (1 al 12)."

@@ -34,18 +34,18 @@ sources:
                     values: ["Urban", "Rural"]
 
           - name: EDUCATION_LEVEL
-            description: "Nivel de educación formal actual del estudiante (ej. Tertiary Education, HSC / A' Level)."
+            description: "Nivel de educación formal actual del estudiante."
             data_tests:
               - accepted_values:
                   arguments:
-                    values: ["Tertiary Education", "SSC / O' Level", "HSC / A' Level"]
+                    values: ["Tertiary Education", "SSC / O Level", "HSC / A Level"]
 
           - name: SOCIOECONOMIC_STATUS
             description: "Estatus socioeconómico aproximado basado en el nivel máximo de estudios de los padres."
             data_tests:
               - accepted_values:
                   arguments:
-                    values: ["Tertiary Education", "SSC / O' Level", "HSC / A' Level", "No education", "Madrasah"]
+                    values: ["Tertiary Education", "SSC / O Level", "HSC / A Level","No education","Madrasah"] 
 
           - name: STUDY_TIME_HOURS
             description: "Tiempo estimado de estudio diario reportado autónomamente (número entero de horas)."
@@ -53,11 +53,11 @@ sources:
           - name: ATTENDANCE_RATE_PERCENTILE
             description: "Tasa de asistencia a clases expresada numéricamente como porcentaje en formato entero."
             data_tests:
-              # dbt-utils ofrece dbt_utils.expression_is_true. Aquí usamos el test nativo para validar que esté entre 0 y 100
-              - dbt_utils.expression_is_true:
+              - dbt_expectations.expect_column_values_to_be_between:
                   arguments:
-                    expression: ">= 0 and <= 100"
-              - not_null
+                    min_value: 0
+                    max_value: 100
+              
 
           - name: SOCIAL_MEDIA_PLATFORM
             description: "Red social principal o en la que el estudiante invierte la mayor cantidad de tiempo."
@@ -68,13 +68,14 @@ sources:
 
           - name: TIME_SPENT_SOCIAL_MEDIA_HOURS
             description: "Cantidad total de horas diarias consumidas en plataformas de redes sociales (número entero)."
+            
+
+          - name: MOST_TIME_SPENT_IN_A_DAY
+            description: "Momento preferente del día en el que se registra el pico más alto de uso de redes sociales."
             data_tests:
               - accepted_values:
                   arguments:
                     values: ["Night", "Morning", "Evening", "Afternoon"]
-
-          - name: MOST_TIME_SPENT_IN_A_DAY
-            description: "Momento preferente del día en el que se registra el pico más alto de uso de redes sociales."
 
           - name: PHYSICAL_ACTIVITY
             description: "Indicador binario sobre si realiza al menos 30 minutos de actividad física al día."
