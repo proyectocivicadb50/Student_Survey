@@ -1,0 +1,15 @@
+student_survey: # Pon aquí el nombre exacto de tu profile en dbt_project.yml
+  outputs:
+    prod:
+      type: snowflake
+      account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('DBT_SNOWFLAKE_USER') }}"
+      password: "{{ env_var('DBT_SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('DBT_SNOWFLAKE_ROLE') }}"
+      warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE') }}"
+      # dbt inyectará dinámicamente estas bases de datos según el modelo
+      database: PRO_SILVER_DB 
+      schema: PUBLIC
+      threads: 4
+      client_session_keep_alive: False
+  target: prod
